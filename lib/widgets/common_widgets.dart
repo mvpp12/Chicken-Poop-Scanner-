@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
 
@@ -341,7 +342,7 @@ class HistoryCard extends StatelessWidget {
               child: imagePath.isNotEmpty
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(8),
-                      child: Image.asset(imagePath, fit: BoxFit.cover),
+                      child: Image.file(File(imagePath), fit: BoxFit.cover),
                     )
                   : const Icon(Icons.image),
             ),

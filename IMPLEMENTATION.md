@@ -17,46 +17,25 @@ A comprehensive Flutter mobile application for detecting chicken diseases using 
 - Quick access to History, Guides, and Settings
 - Info and settings navigation
 
-### 3. **Capture Screen** (`capture_screen.dart`)
-- Photo capture interface
-- Camera preview area
-- Photography guidelines with numbered steps
-- Photo quality feedback
-- Confirm/Retake options
+### 3. **Unified Scan Flow**
+- Live camera preview and capture on Home
+- Immediate ML inference and result sheet
+- Single scan entry point to avoid duplicate flows
 
-### 4. **Confirm Photo Screen** (`confirm_photo_screen.dart`)
-- Photo preview before processing
-- Quality check indicators (Lighting, Focus, Frame)
-- Photo validation display
-- Use Photo or Retake options
-
-### 5. **Processing Screen** (`processing_screen.dart`)
-- Real-time analysis progress
-- Animated loading indicators
-- Step-by-step progress (Photo Received → Processing Image → Running Analysis)
-- Auto-transition to results
-
-### 6. **Result Screen** (`result_screen.dart`)
-- Disease detection results
-- Confidence score with progress indicator
-- Disease information and description
-- Recommended actions
-- Save and share functionality
-
-### 7. **History Screen** (`history_screen.dart`)
+### 4. **History Screen** (`history_screen.dart`)
 - Complete scan history with filters
 - Statistics (Total Scans, Diseases Found, Success Rate)
 - Filterable by status (All, Healthy, Warning, Disease)
 - Each scan is clickable for detailed view
 
-### 8. **Detail View Screen** (`detail_view_screen.dart`)
+### 5. **Detail View Screen** (`detail_view_screen.dart`)
 - Detailed scan information
 - Full diagnosis breakdown
 - Analysis metrics
 - Re-analyze and export options
 - Share results
 
-### 9. **Tips & Help Screen** (`tips_screen.dart`)
+### 6. **Tips & Help Screen** (`tips_screen.dart`)
 - Two-tab interface:
   - **Photo Guide Tab**: Photography best practices
     - How to take clear photos
@@ -138,11 +117,10 @@ lib/
 ```
 Splash Screen
     ↓
-Home Screen
-    ├→ Capture Screen → Confirm Photo → Processing → Result
-    ├→ History Screen → Detail View
-    ├→ Tips Screen
-    └→ Settings Screen
+Home Screen (Live Scan)
+  ├→ History Screen → Detail View
+  ├→ Tips Screen
+  └→ Settings Screen
 ```
 
 ## 📦 Dependencies

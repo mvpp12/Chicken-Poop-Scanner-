@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
 import '../widgets/common_widgets.dart';
@@ -43,7 +44,17 @@ class _DetailViewScreenState extends State<DetailViewScreen> {
                     width: 1,
                   ),
                 ),
-                child: const Icon(Icons.image, size: 80, color: AppColors.gray),
+                child:
+                    (item?['imagePath'] != null &&
+                        (item?['imagePath'] as String).isNotEmpty)
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Image.file(
+                          File(item?['imagePath']),
+                          fit: BoxFit.cover,
+                        ),
+                      )
+                    : const Icon(Icons.image, size: 80, color: AppColors.gray),
               ),
               const SizedBox(height: 24),
 
