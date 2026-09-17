@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
+import '../l10n/app_localizations.dart';
 
 class ProcessingScreen extends StatefulWidget {
   const ProcessingScreen({Key? key}) : super(key: key);
@@ -36,6 +37,7 @@ class _ProcessingScreenState extends State<ProcessingScreen>
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.white,
       body: Center(
@@ -78,7 +80,7 @@ class _ProcessingScreenState extends State<ProcessingScreen>
 
             // Status Text
             Text(
-              'Analyzing...',
+              localization.analyzing,
               style: Theme.of(
                 context,
               ).textTheme.headlineSmall?.copyWith(color: AppColors.charcoal),
@@ -93,19 +95,19 @@ class _ProcessingScreenState extends State<ProcessingScreen>
             const SizedBox(height: 48),
             _ProgressStep(
               icon: Icons.check_circle,
-              title: 'Photo Received',
+              title: localization.photoReceived,
               isCompleted: true,
             ),
             const SizedBox(height: 16),
             _ProgressStep(
               icon: Icons.hourglass_bottom,
-              title: 'Processing Image',
+              title: localization.processingImage,
               isCompleted: false,
             ),
             const SizedBox(height: 16),
             _ProgressStep(
               icon: Icons.analytics,
-              title: 'Running Analysis',
+              title: localization.runningAnalysis,
               isCompleted: false,
             ),
           ],

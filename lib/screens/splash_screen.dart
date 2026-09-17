@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_spacing.dart';
 import '../constants/app_typography.dart';
+import '../l10n/app_localizations.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -82,6 +83,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final localization = AppLocalizations.of(context)!;
 
     return Scaffold(
       body: Container(
@@ -163,7 +165,9 @@ class _SplashScreenState extends State<SplashScreen>
                               ),
                               const SizedBox(height: 14),
                               Text(
-                                _statusText,
+                                _statusText == 'Almost ready...'
+                                    ? localization.almostReady
+                                    : _statusText,
                                 style: AppTypography.bodySmall.copyWith(
                                   color: AppColors.textSecondary,
                                 ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
 import '../widgets/common_widgets.dart';
+import '../l10n/app_localizations.dart';
 
 class ResultScreen extends StatefulWidget {
   const ResultScreen({Key? key}) : super(key: key);
@@ -12,9 +13,10 @@ class ResultScreen extends StatefulWidget {
 class _ResultScreenState extends State<ResultScreen> {
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Analysis Result'),
+        title: Text(localization.analysisResult),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.of(context).pushNamed('/home'),
@@ -52,8 +54,8 @@ class _ResultScreenState extends State<ResultScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(
-                                'Disease Detected',
+                              Text(
+                                localization.disease,
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w700,
@@ -87,7 +89,7 @@ class _ResultScreenState extends State<ResultScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Confidence Score',
+                      localization.confidence,
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     const SizedBox(height: 12),
@@ -151,7 +153,7 @@ class _ResultScreenState extends State<ResultScreen> {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'Common Symptoms:',
+                      localization.commonSymptoms,
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
                     const SizedBox(height: 8),
@@ -194,21 +196,21 @@ class _ResultScreenState extends State<ResultScreen> {
 
               // Action Buttons
               PrimaryButton(
-                label: 'Save Result',
+                label: localization.saveToHistory,
                 onPressed: () {
                   showCustomSnackBar(context, 'Result saved successfully!');
                 },
               ),
               const SizedBox(height: 12),
               SecondaryButton(
-                label: 'Share Result',
+                label: localization.share,
                 onPressed: () {
-                  showCustomSnackBar(context, 'Share feature coming soon!');
+                  showCustomSnackBar(context, localization.shareComingSoon);
                 },
               ),
               const SizedBox(height: 12),
               SecondaryButton(
-                label: 'Back to Home',
+                label: localization.backToHome,
                 onPressed: () {
                   Navigator.of(context).pushNamed('/home');
                 },

@@ -3,6 +3,7 @@ import '../constants/app_colors.dart';
 import '../constants/app_spacing.dart';
 import '../constants/app_typography.dart';
 import '../widgets/app_widgets.dart';
+import '../l10n/app_localizations.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -21,18 +22,21 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       title: 'AI-Powered\nDisease Detection',
       subtitle:
           'Instantly detect chicken diseases from poop samples using advanced AI technology trained on thousands of samples.',
+      illustrationAsset: 'assets/onboarding/detection.png',
     ),
     _OnboardingData(
       tag: 'Fast & Accurate',
       title: 'Get Results\nin Seconds',
       subtitle:
           'Point your camera, capture a clear photo, and receive a detailed health diagnosis in 3-5 seconds.',
+      illustrationAsset: 'assets/onboarding/results.png',
     ),
     _OnboardingData(
       tag: 'Farm Management',
       title: 'Keep Your\nFlock Healthy',
       subtitle:
           'Track scan history, monitor farm health trends, and get actionable recommendations to protect your flock.',
+      illustrationAsset: 'assets/onboarding/flock_health.png',
     ),
   ];
 
@@ -51,6 +55,30 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
+    final pages = [
+      _OnboardingData(
+        tag: localization.smartScanning,
+        title: localization.aiDiseaseDetection,
+        subtitle:
+            'Instantly detect chicken diseases from poop samples using advanced AI technology trained on thousands of samples.',
+        illustrationAsset: 'assets/onboarding/detection.png',
+      ),
+      _OnboardingData(
+        tag: localization.fastAccurate,
+        title: localization.getResultsSeconds,
+        subtitle:
+            'Point your camera, capture a clear photo, and receive a detailed health diagnosis in 3-5 seconds.',
+        illustrationAsset: 'assets/onboarding/results.png',
+      ),
+      _OnboardingData(
+        tag: localization.farmManagement,
+        title: localization.keepFlockHealthy,
+        subtitle:
+            'Track scan history, monitor farm health trends, and get actionable recommendations to protect your flock.',
+        illustrationAsset: 'assets/onboarding/flock_health.png',
+      ),
+    ];
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
@@ -66,7 +94,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 child: GestureDetector(
                   onTap: _skip,
                   child: Text(
-                    'Skip',
+                    localization.skip,
                     style: AppTypography.labelMedium.copyWith(
                       color: AppColors.textSecondary,
                     ),
@@ -78,8 +106,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               child: PageView.builder(
                 controller: _pageController,
                 onPageChanged: (i) => setState(() => _currentPage = i),
-                itemCount: _pages.length,
-                itemBuilder: (_, i) => _OnboardingPage(data: _pages[i]),
+                itemCount: pages.length,
+                itemBuilder: (_, i) => _OnboardingPage(data: pages[i]),
               ),
             ),
             Padding(
@@ -113,8 +141,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   const SizedBox(height: AppSpacing.lg),
                   AppPrimaryButton(
                     label: _currentPage == _pages.length - 1
-                        ? 'Get Started'
-                        : 'Next',
+                        ? localization.getStarted
+                        : localization.next,
                     onTap: _next,
                     icon: _currentPage < _pages.length - 1
                         ? const Icon(Icons.arrow_forward_rounded, size: 18)
@@ -145,7 +173,7 @@ class _OnboardingPage extends StatelessWidget {
             child: Container(
               margin: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: AppColors.primarySurface,
+                color: const Color(0xFFE7F1D5),
                 borderRadius: BorderRadius.circular(AppSpacing.radiusXl),
               ),
               child: Stack(
@@ -153,18 +181,13 @@ class _OnboardingPage extends StatelessWidget {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(AppSpacing.radiusXl),
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [Color(0xFFEAF2E0), Color(0xFFD4E6B5)],
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: SizedBox.expand(
+                        child: Image.asset(
+                          data.illustrationAsset,
+                          fit: BoxFit.contain,
                         ),
-                      ),
-                      child: const Icon(
-                        Icons.biotech_rounded,
-                        size: 90,
-                        color: AppColors.primary,
                       ),
                     ),
                   ),
@@ -197,24 +220,26 @@ class _OnboardingPage extends StatelessWidget {
           const SizedBox(height: AppSpacing.lg),
           Expanded(
             flex: 3,
-            child: Column(
-              children: [
-                Text(
-                  data.title,
-                  style: AppTypography.displayMedium.copyWith(
-                    color: AppColors.textPrimary,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Text(
+                    data.title,
+                    style: AppTypography.displayMedium.copyWith(
+                      color: AppColors.textPrimary,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  data.subtitle,
-                  style: AppTypography.bodyMedium.copyWith(
-                    color: AppColors.textSecondary,
+                  const SizedBox(height: 12),
+                  Text(
+                    data.subtitle,
+                    style: AppTypography.bodyMedium.copyWith(
+                      color: AppColors.textSecondary,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],
@@ -227,10 +252,12 @@ class _OnboardingData {
   final String tag;
   final String title;
   final String subtitle;
+  final String illustrationAsset;
 
   const _OnboardingData({
     required this.tag,
     required this.title,
     required this.subtitle,
+    required this.illustrationAsset,
   });
 }

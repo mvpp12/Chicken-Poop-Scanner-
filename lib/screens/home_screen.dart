@@ -9,6 +9,7 @@ import '../constants/app_typography.dart';
 import '../services/ml_service.dart';
 import '../services/history_store.dart';
 import '../widgets/app_widgets.dart';
+import '../l10n/app_localizations.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -71,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       if (cameras.isEmpty) return;
       _cameraController = CameraController(
         cameras.first,
-        ResolutionPreset.high,
+        ResolutionPreset.medium,
         enableAudio: false,
       );
       await _cameraController!.initialize();
@@ -289,6 +290,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.background,
       body: Column(
@@ -333,14 +335,20 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               AppSpacing.screenPadding,
               8,
             ),
-            child: const Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                InfoChip(icon: Icons.wb_sunny_outlined, label: 'Good lighting'),
-                InfoChip(icon: Icons.fullscreen_rounded, label: 'Fill frame'),
+                InfoChip(
+                  icon: Icons.wb_sunny_outlined,
+                  label: localization.goodLighting,
+                ),
+                InfoChip(
+                  icon: Icons.fullscreen_rounded,
+                  label: localization.fillFrame,
+                ),
                 InfoChip(
                   icon: Icons.motion_photos_off_outlined,
-                  label: 'Avoid blur',
+                  label: localization.avoidBlur,
                 ),
               ],
             ),
@@ -356,7 +364,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               children: [
                 _ControlButton(
                   icon: Icons.image_outlined,
-                  label: 'Upload',
+                  label: localization.upload,
                   onTap: _pickFromGallery,
                 ),
                 _ScanControl(

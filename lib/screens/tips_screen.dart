@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
+import '../l10n/app_localizations.dart';
+import 'tip_detail_screen.dart';
 
 class TipsScreen extends StatefulWidget {
   const TipsScreen({Key? key}) : super(key: key);
@@ -9,46 +11,45 @@ class TipsScreen extends StatefulWidget {
 }
 
 class _TipsScreenState extends State<TipsScreen> {
-  final List<Map<String, String>> tips = [
-    {
-      'title': 'How to take clear photos',
-      'description':
-          'Learn the best way to capture sharp, clear images for accurate diagnosis. Use natural light and avoid shadows.',
-      'icon': '📸',
-    },
-    {
-      'title': 'Lighting Guide',
-      'description':
-          'Natural light works best. Avoid direct sunlight that creates harsh shadows. Overcast days are ideal.',
-      'icon': '💡',
-    },
-    {
-      'title': 'Camera Mistakes',
-      'description':
-          'Blurry images reduce diagnosis accuracy. Keep your hand steady and ensure the sample is in focus.',
-      'icon': '🚫',
-    },
-    {
-      'title': 'What to photograph',
-      'description':
-          'Always photograph chicken poop samples. Get close-up shots showing texture and color clearly.',
-      'icon': '🐔',
-    },
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
+    final tips = [
+      TipData(
+        title: localization.tipClearPhotosTitle,
+        description: localization.tipClearPhotosDescription,
+        assetPath: 'assets/tips/clear_photos.png',
+      ),
+      TipData(
+        title: localization.tipLightingTitle,
+        description: localization.tipLightingDescription,
+        assetPath: 'assets/tips/lighting.png',
+      ),
+      TipData(
+        title: localization.tipCameraMistakesTitle,
+        description: localization.tipCameraMistakesDescription,
+        assetPath: 'assets/tips/camera_mistakes.png',
+      ),
+      TipData(
+        title: localization.tipWhatToPhotographTitle,
+        description: localization.tipWhatToPhotographDescription,
+        assetPath: 'assets/tips/what_to_photograph.png',
+      ),
+    ];
     return Scaffold(
-      appBar: AppBar(title: const Text('Photo Tips & Guide')),
+      appBar: AppBar(title: Text(localization.photoTipsGuide)),
       body: ListView.builder(
         padding: const EdgeInsets.all(16),
         itemCount: tips.length,
         itemBuilder: (context, index) {
           final tip = tips[index];
           return _TipCard(
-            icon: tip['icon'] ?? '📋',
-            title: tip['title'] ?? '',
-            description: tip['description'] ?? '',
+            tip: tip,
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => TipDetailScreen(tip: tip)),
+              );
+            },
           );
         },
       ),
@@ -57,55 +58,61 @@ class _TipsScreenState extends State<TipsScreen> {
 }
 
 class _TipCard extends StatelessWidget {
-  final String icon;
-  final String title;
-  final String description;
+  final TipData tip;
+  final VoidCallback onTap;
 
-  const _TipCard({
-    required this.icon,
-    required this.title,
-    required this.description,
-  });
+  const _TipCard({required this.tip, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Card(
+      clipBehavior: Clip.antiAlias,
       margin: const EdgeInsets.symmetric(vertical: 8),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.cardBackground,
+      color: AppColors.cardBackground,
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.gray.withOpacity(0.2), width: 1),
+        side: BorderSide(color: AppColors.gray.withOpacity(0.2), width: 1),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(icon, style: const TextStyle(fontSize: 28)),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.charcoal,
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: 72,
+                    height: 72,
+                    child: Image.asset(tip.assetPath, fit: BoxFit.contain),
                   ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      tip.title,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.charcoal,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              Text(
+                tip.description,
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: AppColors.gray,
+                  height: 1.5,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 12),
-          Text(
-            description,
-            style: const TextStyle(
-              fontSize: 14,
-              color: AppColors.gray,
-              height: 1.5,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

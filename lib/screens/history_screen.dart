@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
 import '../widgets/common_widgets.dart';
 import '../services/history_store.dart';
+import '../l10n/app_localizations.dart';
 
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({Key? key}) : super(key: key);
@@ -23,8 +24,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: const Text('Scan History')),
+      appBar: AppBar(title: Text(localization.scanHistory)),
       body: ValueListenableBuilder<List<Map<String, dynamic>>>(
         valueListenable: HistoryStore.instance.items,
         builder: (context, history, _) {
@@ -52,7 +54,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                     child: Row(
                       children: [
                         _FilterChip(
-                          label: 'All',
+                          label: localization.all,
                           isSelected: selectedFilter == 'All',
                           onTap: () {
                             setState(() => selectedFilter = 'All');
@@ -60,7 +62,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         ),
                         const SizedBox(width: 8),
                         _FilterChip(
-                          label: 'Healthy',
+                          label: localization.healthy,
                           isSelected: selectedFilter == 'Healthy',
                           onTap: () {
                             setState(() => selectedFilter = 'Healthy');
@@ -68,7 +70,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         ),
                         const SizedBox(width: 8),
                         _FilterChip(
-                          label: 'Warning',
+                          label: localization.warning,
                           isSelected: selectedFilter == 'Warning',
                           onTap: () {
                             setState(() => selectedFilter = 'Warning');
@@ -76,7 +78,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         ),
                         const SizedBox(width: 8),
                         _FilterChip(
-                          label: 'Disease',
+                          label: localization.disease,
                           isSelected: selectedFilter == 'Disease',
                           onTap: () {
                             setState(() => selectedFilter = 'Disease');
@@ -92,21 +94,21 @@ class _HistoryScreenState extends State<HistoryScreen> {
                     children: [
                       Expanded(
                         child: _StatCard(
-                          title: 'Total Scans',
+                          title: localization.totalScans,
                           value: totalScans.toString(),
                         ),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
                         child: _StatCard(
-                          title: 'Diseases Found',
+                          title: localization.diseasesFound,
                           value: diseaseCount.toString(),
                         ),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
                         child: _StatCard(
-                          title: 'Success Rate',
+                          title: localization.successRate,
                           value: '$successRate%',
                         ),
                       ),
@@ -116,12 +118,12 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
                   // Scan History List
                   Text(
-                    'Recent Scans',
+                    localization.recentScans,
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
                   const SizedBox(height: 12),
                   if (filteredHistory.isEmpty)
-                    const _EmptyState()
+                    _EmptyState(localization: localization)
                   else
                     ...filteredHistory.asMap().entries.map((entry) {
                       int index = entry.key;
@@ -223,7 +225,9 @@ class _StatCard extends StatelessWidget {
 }
 
 class _EmptyState extends StatelessWidget {
-  const _EmptyState();
+  final AppLocalizations localization;
+
+  const _EmptyState({required this.localization});
 
   @override
   Widget build(BuildContext context) {
@@ -240,14 +244,14 @@ class _EmptyState extends StatelessWidget {
           const Icon(Icons.history_toggle_off, size: 40, color: AppColors.gray),
           const SizedBox(height: 12),
           Text(
-            'No scans yet',
+            localization.noScansYet,
             style: Theme.of(
               context,
             ).textTheme.titleMedium?.copyWith(color: AppColors.charcoal),
           ),
           const SizedBox(height: 6),
-          const Text(
-            'Run your first scan to see results here.',
+          Text(
+            localization.runFirstScan,
             style: TextStyle(fontSize: 13, color: AppColors.gray),
             textAlign: TextAlign.center,
           ),

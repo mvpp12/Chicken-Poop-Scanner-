@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
+import '../l10n/app_localizations.dart';
 
 class DiseasesGuideScreen extends StatefulWidget {
   const DiseasesGuideScreen({Key? key}) : super(key: key);
@@ -34,9 +35,10 @@ class _DiseasesGuideScreenState extends State<DiseasesGuideScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Diseases Guide'),
+        title: Text(localization.diseaseGuide),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
@@ -78,6 +80,7 @@ class _DiseaseCardState extends State<_DiseaseCard> {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return GestureDetector(
       onTap: () {
         setState(() => isExpanded = !isExpanded);
@@ -132,8 +135,8 @@ class _DiseaseCardState extends State<_DiseaseCard> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Common Symptoms:',
+                      Text(
+                        localization.commonSymptoms,
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
@@ -156,7 +159,7 @@ class _DiseaseCardState extends State<_DiseaseCard> {
                           color: AppColors.warning.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: const Row(
+                        child: Row(
                           children: [
                             Icon(
                               Icons.info,
@@ -166,7 +169,7 @@ class _DiseaseCardState extends State<_DiseaseCard> {
                             SizedBox(width: 8),
                             Expanded(
                               child: Text(
-                                'Contact a veterinarian for treatment recommendations',
+                                localization.contactVeterinarian,
                                 style: TextStyle(
                                   fontSize: 12,
                                   color: AppColors.charcoal,

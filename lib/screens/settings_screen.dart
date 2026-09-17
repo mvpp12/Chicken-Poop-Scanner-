@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../constants/app_colors.dart';
+import '../l10n/app_localizations.dart';
+import '../services/language_provider.dart';
 import '../widgets/common_widgets.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -12,22 +15,24 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   bool notificationsEnabled = true;
   bool locationEnabled = false;
-  String selectedLanguage = 'English';
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
+    final languageProvider = context.watch<LanguageProvider>();
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
+      appBar: AppBar(title: Text(localization.settings)),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // App Section
-            _SettingsSectionTitle(title: 'App Settings'),
+            _SettingsSectionTitle(title: localization.appSettings),
             _SettingsToggle(
               icon: Icons.notifications,
-              title: 'Push Notifications',
-              subtitle: 'Receive scan results and alerts',
+              title: localization.pushNotifications,
+              subtitle: localization.receiveScanResults,
               value: notificationsEnabled,
               onChanged: (value) {
                 setState(() => notificationsEnabled = value);
@@ -35,8 +40,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             _SettingsToggle(
               icon: Icons.location_on,
-              title: 'Location Services',
-              subtitle: 'Help improve diagnosis accuracy',
+              title: localization.locationServices,
+              subtitle: localization.improveDiagnosis,
               value: locationEnabled,
               onChanged: (value) {
                 setState(() => locationEnabled = value);
@@ -44,38 +49,54 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
 
             // Language & Region
-            _SettingsSectionTitle(title: 'Language & Region'),
+            _SettingsSectionTitle(title: localization.languageAndRegion),
             _SettingsDropdown(
               icon: Icons.language,
-              title: 'Language',
-              subtitle: 'Choose your preferred language',
-              value: selectedLanguage,
-              options: ['English', 'Spanish', 'French', 'Chinese'],
-              onChanged: (value) {
-                setState(() => selectedLanguage = value);
-              },
+              title: localization.language,
+              subtitle: localization.choosePreferredLanguage,
+              value: languageProvider.locale.languageCode,
+              options: [
+                _LanguageOption(locale: const Locale('en'), label: 'English'),
+                _LanguageOption(locale: const Locale('tl'), label: 'Tagalog'),
+                _LanguageOption(
+                  locale: const Locale('es'),
+                  label: 'Spanish (${localization.comingSoon})',
+                  enabled: false,
+                ),
+                _LanguageOption(
+                  locale: const Locale('fr'),
+                  label: 'French (${localization.comingSoon})',
+                  enabled: false,
+                ),
+                _LanguageOption(
+                  locale: const Locale('zh'),
+                  label: 'Chinese (${localization.comingSoon})',
+                  enabled: false,
+                ),
+              ],
+              onChanged: context.read<LanguageProvider>().setLanguage,
             ),
 
             // Privacy & Data
-            _SettingsSectionTitle(title: 'Privacy & Data'),
+            _SettingsSectionTitle(title: localization.privacyData),
             _SettingsTile(
               icon: Icons.privacy_tip,
-              title: 'Privacy Policy',
-              subtitle: 'Read our privacy policy',
+              title: localization.privacyPolicy,
+              subtitle: localization.readPrivacyPolicy,
               onTap: () =>
                   showCustomSnackBar(context, 'Opening privacy policy...'),
             ),
             _SettingsTile(
               icon: Icons.description,
-              title: 'Terms of Service',
-              subtitle: 'Read terms and conditions',
+              title: localization.termsOfService,
+              subtitle: localization.readTerms,
               onTap: () =>
                   showCustomSnackBar(context, 'Opening terms of service...'),
             ),
             _SettingsTile(
               icon: Icons.data_usage,
-              title: 'Data Management',
-              subtitle: 'Export or delete your data',
+              title: localization.dataManagement,
+              subtitle: localization.exportDeleteData,
               onTap: () => showCustomSnackBar(
                 context,
                 'Data management feature coming soon!',
@@ -83,10 +104,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
 
             // About
-            _SettingsSectionTitle(title: 'About'),
+            _SettingsSectionTitle(title: localization.about),
             _SettingsTile(
               icon: Icons.info,
-              title: 'About App',
+              title: localization.aboutApp,
               subtitle: 'Version 1.0.0',
               onTap: () {
                 showDialog(
@@ -118,29 +139,30 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             _SettingsTile(
               icon: Icons.help,
-              title: 'Help & Support',
-              subtitle: 'Get help with the app',
+              title: localization.helpSupport,
+              subtitle: localization.getHelp,
               onTap: () => showCustomSnackBar(context, 'Support coming soon!'),
             ),
 
             // Danger Zone
-            _SettingsSectionTitle(title: 'Danger Zone', isDanger: true),
+            _SettingsSectionTitle(
+              title: localization.dangerZone,
+              isDanger: true,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: DangerButton(
-                label: 'Clear All Data',
+                label: localization.clearAllData,
                 onPressed: () {
                   showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
-                      title: const Text('Clear All Data?'),
-                      content: const Text(
-                        'This will delete all your scan history and settings. This action cannot be undone.',
-                      ),
+                      title: Text(localization.clearAllDataQuestion),
+                      content: Text(localization.clearDataWarning),
                       actions: [
                         TextButton(
                           onPressed: () => Navigator.pop(context),
-                          child: const Text('Cancel'),
+                          child: Text(localization.cancel),
                         ),
                         TextButton(
                           onPressed: () {
@@ -151,7 +173,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               isError: true,
                             );
                           },
-                          child: const Text('Clear'),
+                          child: Text(localization.clear),
                         ),
                       ],
                     ),
@@ -219,6 +241,7 @@ class _SettingsToggle extends StatelessWidget {
           Icon(icon, color: AppColors.primary, size: 24),
           const SizedBox(width: 12),
           Expanded(
+            flex: 3,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -254,8 +277,8 @@ class _SettingsDropdown extends StatelessWidget {
   final String title;
   final String subtitle;
   final String value;
-  final List<String> options;
-  final Function(String) onChanged;
+  final List<_LanguageOption> options;
+  final Function(Locale) onChanged;
 
   const _SettingsDropdown({
     required this.icon,
@@ -299,23 +322,66 @@ class _SettingsDropdown extends StatelessWidget {
               ],
             ),
           ),
-          DropdownButton<String>(
-            value: value,
-            items: options
-                .map(
-                  (option) =>
-                      DropdownMenuItem(value: option, child: Text(option)),
-                )
-                .toList(),
-            onChanged: (selected) {
-              if (selected != null) onChanged(selected);
-            },
-            underline: const SizedBox(),
+          const SizedBox(width: 12),
+          Flexible(
+            flex: 2,
+            child: DropdownButton<String>(
+              isExpanded: true,
+              value: value,
+              selectedItemBuilder: (context) => options
+                  .map(
+                    (option) => Align(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        option.shortLabel,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  )
+                  .toList(),
+              items: options
+                  .map(
+                    (option) => DropdownMenuItem(
+                      value: option.locale.languageCode,
+                      enabled: option.enabled,
+                      child: Text(
+                        option.label,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  )
+                  .toList(),
+              onChanged: (selected) {
+                if (selected != null) {
+                  final option = options.firstWhere(
+                    (option) => option.locale.languageCode == selected,
+                  );
+                  onChanged(option.locale);
+                }
+              },
+              underline: const SizedBox(),
+            ),
           ),
         ],
       ),
     );
   }
+}
+
+class _LanguageOption {
+  final Locale locale;
+  final String label;
+  final bool enabled;
+
+  String get shortLabel => label.split(' (').first;
+
+  const _LanguageOption({
+    required this.locale,
+    required this.label,
+    this.enabled = true,
+  });
 }
 
 class _SettingsTile extends StatelessWidget {

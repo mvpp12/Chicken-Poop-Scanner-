@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
 import '../widgets/common_widgets.dart';
+import '../l10n/app_localizations.dart';
 
 class ConfirmPhotoScreen extends StatefulWidget {
   const ConfirmPhotoScreen({Key? key}) : super(key: key);
@@ -12,9 +13,10 @@ class ConfirmPhotoScreen extends StatefulWidget {
 class _ConfirmPhotoScreenState extends State<ConfirmPhotoScreen> {
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Confirm Photo'),
+        title: Text(localization.confirmPhoto),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
@@ -41,7 +43,7 @@ class _ConfirmPhotoScreenState extends State<ConfirmPhotoScreen> {
                     const Icon(Icons.image, size: 80, color: AppColors.gray),
                     const SizedBox(height: 16),
                     Text(
-                      'Chicken Poop Sample',
+                      localization.chickenSample,
                       style: Theme.of(context).textTheme.headlineSmall,
                     ),
                   ],
@@ -60,26 +62,26 @@ class _ConfirmPhotoScreenState extends State<ConfirmPhotoScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Photo Quality Check',
+                      localization.photoQualityCheck,
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     const SizedBox(height: 12),
                     _QualityCheckItem(
                       icon: Icons.check_circle,
-                      title: 'Lighting',
-                      status: 'Good',
+                      title: localization.lighting,
+                      status: localization.good,
                     ),
                     const SizedBox(height: 8),
                     _QualityCheckItem(
                       icon: Icons.check_circle,
-                      title: 'Focus',
-                      status: 'Clear',
+                      title: localization.focus,
+                      status: localization.clear,
                     ),
                     const SizedBox(height: 8),
                     _QualityCheckItem(
                       icon: Icons.check_circle,
-                      title: 'Frame',
-                      status: 'Proper',
+                      title: localization.frame,
+                      status: localization.proper,
                     ),
                   ],
                 ),
@@ -88,19 +90,19 @@ class _ConfirmPhotoScreenState extends State<ConfirmPhotoScreen> {
 
               // Action Buttons
               PrimaryButton(
-                label: 'Use Photo',
+                label: localization.usePhoto,
                 onPressed: () {
                   Navigator.of(context).pushNamed('/processing');
                 },
               ),
               const SizedBox(height: 12),
               SecondaryButton(
-                label: 'Retake Photo',
+                label: localization.retakePhoto,
                 onPressed: () => Navigator.pop(context),
               ),
               const SizedBox(height: 12),
               SecondaryButton(
-                label: 'Upload Different',
+                label: localization.uploadDifferent,
                 onPressed: () {
                   Navigator.of(context).pushNamed('/capture');
                 },

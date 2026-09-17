@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_typography.dart';
 import '../constants/app_spacing.dart';
+import '../l10n/app_localizations.dart';
 
 class AppBottomNavBar extends StatelessWidget {
   final int currentIndex;
@@ -38,6 +39,7 @@ class AppBottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Container(
       height:
           AppSpacing.bottomNavHeight + MediaQuery.of(context).padding.bottom,
@@ -56,7 +58,7 @@ class AppBottomNavBar extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: List.generate(_items.length, (i) {
-            final item = _items[i];
+            final item = _items[i].localized(localization);
             final active = currentIndex == i;
             return _NavBarItem(
               item: item,
@@ -128,4 +130,15 @@ class _NavItem {
     required this.icon,
     required this.activeIcon,
   });
+
+  _NavItem localized(AppLocalizations localization) => _NavItem(
+    label: switch (label) {
+      'Home' => localization.home,
+      'History' => localization.history,
+      'Tips' => localization.tips,
+      _ => localization.settings,
+    },
+    icon: icon,
+    activeIcon: activeIcon,
+  );
 }

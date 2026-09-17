@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
 import 'constants/app_theme.dart';
+import 'l10n/app_localizations.dart';
+import 'services/language_provider.dart';
 import 'screens/splash_screen.dart';
 import 'screens/history_screen.dart';
 import 'screens/detail_view_screen.dart';
@@ -19,9 +23,31 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (_) => LanguageProvider()..loadLanguage(),
+      child: const _LocalizedApp(),
+    );
+  }
+}
+
+class _LocalizedApp extends StatelessWidget {
+  const _LocalizedApp();
+
+  @override
+  Widget build(BuildContext context) {
+    final languageProvider = context.watch<LanguageProvider>();
+
     return MaterialApp(
       title: 'Chicken Health Scan',
       theme: AppTheme.lightTheme,
+      locale: languageProvider.locale,
+      supportedLocales: const [Locale('en'), Locale('tl')],
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       home: const SplashScreen(),
       onGenerateRoute: (settings) {
         switch (settings.name) {

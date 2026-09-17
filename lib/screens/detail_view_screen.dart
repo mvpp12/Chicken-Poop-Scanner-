@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
 import '../widgets/common_widgets.dart';
+import '../l10n/app_localizations.dart';
 
 class DetailViewScreen extends StatefulWidget {
   final Map<String, dynamic>? item;
@@ -17,10 +18,11 @@ class _DetailViewScreenState extends State<DetailViewScreen> {
   @override
   Widget build(BuildContext context) {
     final item = widget.item;
+    final localization = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Scan Details'),
+        title: Text(localization.scanDetails),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
@@ -79,7 +81,7 @@ class _DetailViewScreenState extends State<DetailViewScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Diagnosis',
+                              localization.diagnosis,
                               style: Theme.of(context).textTheme.bodySmall,
                             ),
                             const SizedBox(height: 8),
@@ -100,7 +102,7 @@ class _DetailViewScreenState extends State<DetailViewScreen> {
                       children: [
                         Expanded(
                           child: _DetailItem(
-                            label: 'Confidence',
+                            label: localization.confidence,
                             value: item?['confidence'] ?? 'N/A',
                           ),
                         ),
@@ -119,17 +121,17 @@ class _DetailViewScreenState extends State<DetailViewScreen> {
 
               // Analysis Breakdown
               Text(
-                'Analysis Breakdown',
+                localization.analysisBreakdown,
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
               const SizedBox(height: 12),
               ResultCard(
-                title: 'Primary Finding',
+                title: localization.primaryFinding,
                 value: item?['disease'] ?? 'Unknown',
                 status: item?['status'] ?? 'unknown',
               ),
               ResultCard(
-                title: 'Confidence Level',
+                title: localization.confidenceLevel,
                 value: item?['confidence'] ?? 'N/A',
                 status: item?['status'] ?? 'unknown',
               ),
@@ -158,14 +160,14 @@ class _DetailViewScreenState extends State<DetailViewScreen> {
 
               // Buttons
               PrimaryButton(
-                label: 'Share',
+                label: localization.share,
                 onPressed: () {
-                  showCustomSnackBar(context, 'Share feature coming soon!');
+                  showCustomSnackBar(context, localization.shareComingSoon);
                 },
               ),
               const SizedBox(height: 12),
               SecondaryButton(
-                label: 'Back to History',
+                label: localization.backToHistory,
                 onPressed: () => Navigator.pop(context),
               ),
             ],

@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import '../constants/app_colors.dart';
 import '../widgets/common_widgets.dart';
 import '../services/ml_service.dart';
+import '../l10n/app_localizations.dart';
 
 class CaptureScreen extends StatefulWidget {
   const CaptureScreen({Key? key}) : super(key: key);
@@ -102,9 +103,10 @@ class _CaptureScreenState extends State<CaptureScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Disease Detection'),
+        title: Text(localization.diseaseDetection),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
@@ -307,7 +309,7 @@ class _CaptureScreenState extends State<CaptureScreen> {
                       child: Column(
                         children: [
                           Text(
-                            'Detection Result',
+                            localization.detectionResult,
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                           const SizedBox(height: 12),
@@ -322,7 +324,7 @@ class _CaptureScreenState extends State<CaptureScreen> {
                           const SizedBox(height: 8),
                           if (confidence.isNotEmpty)
                             Text(
-                              'Confidence: $confidence',
+                              '${localization.confidence}: $confidence',
                               style: TextStyle(
                                 fontSize: 16,
                                 color: AppColors.gray,
