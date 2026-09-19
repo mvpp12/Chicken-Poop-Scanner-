@@ -59,6 +59,7 @@ class _LocalizedApp extends StatelessWidget {
             return MaterialPageRoute(builder: (context) => const AppShell());
           case '/main':
             return MaterialPageRoute(builder: (context) => const AppShell());
+          // Legacy scanner route names resolve to the canonical Home flow.
           case '/capture':
             return MaterialPageRoute(builder: (context) => const AppShell());
           case '/confirm':

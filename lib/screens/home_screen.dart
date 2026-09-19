@@ -67,9 +67,17 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   Future<void> _initCamera() async {
+    final localization = AppLocalizations.of(context)!;
     try {
       final cameras = await availableCameras();
-      if (cameras.isEmpty) return;
+      if (cameras.isEmpty) {
+        if (!mounted) return;
+        setState(() {
+          _cameraReady = false;
+          _cameraError = localization.cameraUnavailable;
+        });
+        return;
+      }
       _cameraController = CameraController(
         cameras.first,
         ResolutionPreset.medium,
@@ -80,10 +88,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       setState(() => _cameraReady = true);
     } catch (e) {
       if (!mounted) return;
-      setState(() => _cameraError = e.toString());
+      setState(() {
+        _cameraReady = false;
+        _cameraError = localization.cameraUnavailable;
+      });
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text('Camera error: $e')));
+      ).showSnackBar(SnackBar(content: Text(localization.cameraUnavailable)));
     }
   }
 
@@ -102,6 +113,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   Future<void> _retryCamera() async {
+    await _cameraController?.dispose();
+    _cameraController = null;
     setState(() {
       _cameraError = null;
       _cameraReady = false;
@@ -127,6 +140,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   Future<void> _pickFromGallery() async {
+    if (!_isModelLoaded) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(AppLocalizations.of(context)!.loadingAiModel)),
+      );
+      return;
+    }
     final xFile = await _picker.pickImage(source: ImageSource.gallery);
     if (xFile == null || !mounted) return;
     setState(() => _capturedImage = File(xFile.path));
@@ -449,21 +468,29 @@ class _CameraStatusOverlay extends StatelessWidget {
   Widget build(BuildContext context) {
     if (cameraReady && modelReady) return const SizedBox.shrink();
 
+    final localization = AppLocalizations.of(context)!;
+
     final waiting =
         (cameraError == null && !cameraReady) ||
         (modelError == null && !modelReady);
 
-    final title = waiting ? 'Preparing scanner...' : 'Scanner needs attention';
+    final title = waiting
+        ? localization.preparingScanner
+        : localization.scannerAttention;
 
     final messages = <String>[];
     if (!cameraReady) {
       messages.add(
-        cameraError == null ? 'Starting camera...' : 'Camera unavailable.',
+        cameraError == null
+            ? localization.startingCamera
+            : localization.cameraUnavailable,
       );
     }
     if (!modelReady) {
       messages.add(
-        modelError == null ? 'Loading AI model...' : 'Model failed to load.',
+        modelError == null
+            ? localization.loadingAiModel
+            : localization.modelFailed,
       );
     }
 
@@ -517,11 +544,14 @@ class _CameraStatusOverlay extends StatelessWidget {
                     children: [
                       if (cameraError != null)
                         _RetryButton(
-                          label: 'Retry Camera',
+                          label: localization.retryCamera,
                           onTap: onRetryCamera,
                         ),
                       if (modelError != null)
-                        _RetryButton(label: 'Retry Model', onTap: onRetryModel),
+                        _RetryButton(
+                          label: localization.retryModel,
+                          onTap: onRetryModel,
+                        ),
                     ],
                   ),
                 ],
