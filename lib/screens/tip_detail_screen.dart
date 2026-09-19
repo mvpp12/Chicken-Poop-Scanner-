@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
 import '../l10n/app_localizations.dart';
+import '../widgets/app_image.dart';
 
 class TipData {
   final String title;
@@ -33,10 +34,7 @@ class TipDetailScreen extends StatelessWidget {
             Center(
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxHeight: 260),
-                child: AspectRatio(
-                  aspectRatio: 16 / 10,
-                  child: Image.asset(tip.assetPath, fit: BoxFit.contain),
-                ),
+                child: AppImageAsset(assetPath: tip.assetPath),
               ),
             ),
             const SizedBox(height: 24),

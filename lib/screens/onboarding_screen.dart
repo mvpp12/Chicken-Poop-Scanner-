@@ -107,7 +107,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 controller: _pageController,
                 onPageChanged: (i) => setState(() => _currentPage = i),
                 itemCount: pages.length,
-                itemBuilder: (_, i) => _OnboardingPage(data: pages[i]),
+                itemBuilder: (_, i) =>
+                    _OnboardingPage(data: pages[i], isFirst: i == 0),
               ),
             ),
             Padding(
@@ -160,7 +161,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
 class _OnboardingPage extends StatelessWidget {
   final _OnboardingData data;
-  const _OnboardingPage({required this.data});
+  final bool isFirst;
+
+  const _OnboardingPage({required this.data, required this.isFirst});
 
   @override
   Widget build(BuildContext context) {
@@ -170,50 +173,55 @@ class _OnboardingPage extends StatelessWidget {
         children: [
           Expanded(
             flex: 5,
-            child: Container(
-              margin: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: const Color(0xFFE7F1D5),
-                borderRadius: BorderRadius.circular(AppSpacing.radiusXl),
-              ),
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(AppSpacing.radiusXl),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: SizedBox.expand(
-                        child: Image.asset(
-                          data.illustrationAsset,
-                          fit: BoxFit.contain,
+            child: ClipRRect(
+              borderRadius: isFirst
+                  ? BorderRadius.circular(AppSpacing.radiusXl)
+                  : BorderRadius.zero,
+              child: Container(
+                margin: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFE7F1D5),
+                  borderRadius: BorderRadius.circular(AppSpacing.radiusXl),
+                ),
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(AppSpacing.radiusXl),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: SizedBox.expand(
+                          child: Image.asset(
+                            data.illustrationAsset,
+                            fit: BoxFit.contain,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Positioned(
-                    top: 16,
-                    left: 16,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 14,
-                        vertical: 6,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.primary,
-                        borderRadius: BorderRadius.circular(
-                          AppSpacing.radiusFull,
+                    Positioned(
+                      top: 16,
+                      left: 16,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 14,
+                          vertical: 6,
                         ),
-                      ),
-                      child: Text(
-                        data.tag,
-                        style: AppTypography.labelSmall.copyWith(
-                          color: Colors.white,
+                        decoration: BoxDecoration(
+                          color: AppColors.primary,
+                          borderRadius: BorderRadius.circular(
+                            AppSpacing.radiusFull,
+                          ),
+                        ),
+                        child: Text(
+                          data.tag,
+                          style: AppTypography.labelSmall.copyWith(
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

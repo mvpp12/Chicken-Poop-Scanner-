@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
 import '../l10n/app_localizations.dart';
+import '../widgets/app_image.dart';
 import 'tip_detail_screen.dart';
 
 class TipsScreen extends StatefulWidget {
@@ -86,7 +87,7 @@ class _TipCard extends StatelessWidget {
                   SizedBox(
                     width: 72,
                     height: 72,
-                    child: Image.asset(tip.assetPath, fit: BoxFit.contain),
+                    child: AppImageAsset(assetPath: tip.assetPath),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
